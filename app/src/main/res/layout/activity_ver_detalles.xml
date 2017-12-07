@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    tools:context="itsbolivar.edu.ec.appgraduado.VerDetalles">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_alex"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+
+            >
+
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:scaleType="center"
+                android:src="@drawable/empresa4" />
+            <TextView
+                android:id="@+id/txtdetalleNombre"
+                android:textColor="@color/blanco"
+                android:layout_marginBottom="15dp"
+                android:gravity="center|bottom"
+                android:text="Intel"
+                android:textSize="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_alex"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+            </android.support.v7.widget.Toolbar>
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_anchor="@id/app_bar_alex"
+        app:layout_anchorGravity="bottom|end" />
+
+
+
+    <include layout="@layout/content_ver_detalles"
+        android:id="@+id/include"></include>
+
+
+</android.support.design.widget.CoordinatorLayout>
