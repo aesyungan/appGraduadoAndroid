@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
-            android:background="#dadada"
             android:layout_width="match_parent"
-            android:layout_height="2dp">
+            android:layout_height="2dp"
+            android:background="#dadada">
 
         </LinearLayout>
 
@@ -31,13 +32,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewLogin"
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageEmpresa"
                     android:layout_width="83dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="12dp"
                     android:src="@drawable/empresa6"
-                     />
+                    app:civ_border_color="#646464"
+                    app:civ_border_width="2dp" />
             </LinearLayout>
 
             <LinearLayout
