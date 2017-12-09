@@ -1,41 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="0dp"
+    android:fitsSystemWindows="true"
+
+
     tools:context="itsbolivar.edu.ec.appgraduado.MainActivity">
 
-    <LinearLayout
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/MyAppbar"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapse_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/bgheader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img1"
+                app:layout_collapseMode="pin" />
+<!--
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|bottom"
+                android:paddingBottom="28dp"
+                android:paddingTop="10dp"
+                android:text="Ofertas Laborales"
+                android:textColor="@color/blanco"
+                android:textSize="20dp">
+
+            </TextView>-->
+
+            <android.support.v7.widget.Toolbar
+                android:gravity="center"
+                android:id="@+id/MyToolbar"
+                app:expandedTitleGravity="center_horizontal"
+                android:paddingTop="0dp"
+
+                android:layout_marginBottom="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="parallax" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-            tools:layout_editor_absoluteY="8dp"
+        android:layout_gravity="fill_vertical"
+
+        android:fillViewport="true"
+        android:scrollbars="none"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blanco"
+            android:orientation="vertical"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
             tools:layout_editor_absoluteX="8dp"
-            android:orientation="vertical">
-        <TextView
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:text="Ofertas Laborales"
-            android:textColor="@color/titulo"
-            android:textSize="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-        </TextView>
+            tools:layout_editor_absoluteY="8dp">
 
 
-        <ListView
+            <ListView
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:id="@+id/listViewDatos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/row">
 
-            android:id="@+id/listViewDatos"
-            android:layout_width="match_parent"
-            tools:listitem="@layout/row"
-            android:layout_height="match_parent">
+            </ListView>
+        </LinearLayout>
 
-        </ListView>
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -13,6 +13,16 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.ToolBarStyle"    parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColor">@color/blanco</item>
+        <item name="android:textColorPrimaryInverse">@color/blanco</item>
+    </style>
+    <style name="autoscroll">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
 
+
+    </style>
 
 </resources>

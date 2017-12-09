@@ -1,9 +1,11 @@
 package itsbolivar.edu.ec.appgraduado;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -20,20 +22,29 @@ import itsbolivar.edu.ec.appgraduado.clases.Oferta_laboral;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Oferta_laboral> list= new ArrayList<>();
+    ArrayList<Oferta_laboral> list = new ArrayList<>();
     ListView listViewDatos;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar_alex);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.MyToolbar);
         setSupportActionBar(toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
+        collapsingToolbarLayout.setTitle("Ofertas Laborales");
+        Context context = this;
+        collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(context, R.color.blanco));
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(context, R.color.blanco));
 
-        listViewDatos=(ListView) findViewById(R.id.listViewDatos);
-        LNOferta_laboral lnOferta_laboral= new LNOferta_laboral(MainActivity.this,getBaseContext(),getString(R.string.URL_Service_oferta_laboral));
-        lnOferta_laboral.getOferta_laboralListView(list,listViewDatos);
+
+        collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(context, R.color.respuesta));
+
+        listViewDatos = (ListView) findViewById(R.id.listViewDatos);
+        LNOferta_laboral lnOferta_laboral = new LNOferta_laboral(MainActivity.this, getBaseContext(), getString(R.string.URL_Service_oferta_laboral));
+        lnOferta_laboral.getOferta_laboralListView(list, listViewDatos);
 
         listViewDatos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -45,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-       // ViewCompat.setNestedScrollingEnabled(listViewDatos, true);
-       // listViewDatos.setNestedScrollingEnabled(true);
+        ViewCompat.setNestedScrollingEnabled(listViewDatos, true);
+        // listViewDatos.setNestedScrollingEnabled(true);
     }
 
 }
