@@ -52,7 +52,7 @@ public class login extends AppCompatActivity {
         Context context = this;
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(context, R.color.blanco));
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(context, R.color.blanco));
-        collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(context, R.color.respuesta));
+        collapsingToolbarLayout.setContentScrimColor(ContextCompat.getColor(context, R.color.colocollap));
 
         cardViewLogin = (CardView) findViewById(R.id.cardViewLogin);
         txtUser = (EditText) findViewById(R.id.txtUser);
