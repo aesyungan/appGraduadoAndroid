@@ -17,11 +17,20 @@ public class ManagerHBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table oferta_laboral(_id int primary key,descripcion text)");
+        sqLiteDatabase.execSQL("create table graduado(_id int primary key,descripcion text)");
+        sqLiteDatabase.execSQL("create table aplicar_oferta(_id int primary key,descripcion text)");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table oferta_laboral");
+        sqLiteDatabase.execSQL("drop table graduado ");
+        sqLiteDatabase.execSQL("drop table aplicar_oferta ");
+
+        sqLiteDatabase.execSQL("create table oferta_laboral(_id int primary key,descripcion text)");
+        sqLiteDatabase.execSQL("create table graduado(_id int primary key,descripcion text)");
+        sqLiteDatabase.execSQL("create table aplicar_oferta(_id int primary key,descripcion text)");
 
     }
 }

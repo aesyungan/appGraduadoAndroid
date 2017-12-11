@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#002dc1</color>
+    <color name="colorPrimary">#ff1145</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#0300ac</color>
+    <color name="colorAccent">#ff1145</color>
     <color name="blanco">#ffffff</color>
     <color name="titulo">#7e7e7e</color>
     <color name="respuesta">#c9c9c9</color>
+    <color name="colocollap">#ff1145</color>
+    <color name="colorFondo">#a99da1</color>
+    <color name="colorBlanco">#a3a0a0</color>
+    <color name="colorBlanco1">#dedede</color>
+    <color name="progress_bg">#a3a0a0</color>
+
+    <color name="rojo">#ff0808</color>
+    <color name="celeste">#08ffe6</color>
+    <color name="btn">#ff0e4e</color>
+
 </resources>

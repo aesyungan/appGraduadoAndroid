@@ -1,7 +1,6 @@
 package itsbolivar.edu.ec.appgraduado.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;

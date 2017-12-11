@@ -1,12 +1,7 @@
 package itsbolivar.edu.ec.appgraduado;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -21,14 +16,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import itsbolivar.edu.ec.appgraduado.LN.LNAplicar_Oferta;
 import itsbolivar.edu.ec.appgraduado.LN.LNOferta_laboral;
 import itsbolivar.edu.ec.appgraduado.clases.Oferta_laboral;
+import itsbolivar.edu.ec.appgraduado.clases.staticos.EstadoTelefono;
+import itsbolivar.edu.ec.appgraduado.clases.staticos.UsuarioSingleton;
 
 public class VerDetalles extends AppCompatActivity {
 
 
     Oferta_laboral oferta_laboral = new Oferta_laboral();
-    TextView txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia;
+    TextView txtdetalleNombre, txtDireccion,txtTelefono, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia;
     ImageView imgCards;
 
     @Override
@@ -55,12 +53,17 @@ public class VerDetalles extends AppCompatActivity {
         txtDetalleCargo = (TextView) findViewById(R.id.txtDetalleCargo);
         txtDetalleSueldo = (TextView) findViewById(R.id.txtDetalleSueldo);
         txtDetalleExperiencia = (TextView) findViewById(R.id.txtDetalleExperiencia);
+        txtDireccion = (TextView) findViewById(R.id.txtDetalleDireccion);
+        txtTelefono = (TextView) findViewById(R.id.txtDetalleTelefono);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final LNAplicar_Oferta ln = new LNAplicar_Oferta(EstadoTelefono.activity, EstadoTelefono.context, getString(R.string.IP_SERVIDOR)+"ws/aplicarOferta/AplicarNuevaOferta");
+                ln.Agregar(oferta_laboral, UsuarioSingleton.getInstance().graduado);
+                /*
                 Snackbar.make(view, "Success", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", null).show();*/
             }
         });
         Intent intent = getIntent();
@@ -68,7 +71,8 @@ public class VerDetalles extends AppCompatActivity {
         int id = parametros.getInt("id");
         oferta_laboral.setCodigo(id);
         LNOferta_laboral ln = new LNOferta_laboral(VerDetalles.this, getBaseContext(), getString(R.string.URL_Service_oferta_laboral));
-        ln.getOferta_laboralVer(oferta_laboral, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia);
+        ln.getOferta_laboralVer(oferta_laboral, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia,txtTelefono,txtDireccion);
+
         int listImg[] = new int[]{R.drawable.empresa3, R.drawable.empresa4};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imgCards.setImageDrawable(getResources().getDrawable(listImg[(int) (Math.random() * listImg.length)], getTheme()));

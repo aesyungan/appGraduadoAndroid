@@ -16,7 +16,6 @@ public class Tools {
     private static Tools ourInstance = new Tools();
 
 
-
     public static Tools getInstance() {
         if (ourInstance == null) {
             ourInstance = new Tools();
@@ -25,12 +24,11 @@ public class Tools {
     }
 
 
-
-    private   boolean compruebaConexion(Context context) {
+    private boolean compruebaConexion(Context context) {
 
         boolean connected = false;
 
-        ConnectivityManager connec = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Recupera todas las redes (tanto móviles como wifi)
         NetworkInfo[] redes = connec.getAllNetworkInfo();
@@ -45,12 +43,12 @@ public class Tools {
     }
 
     //si hay acceso a internet
-    private  Boolean isOnlineNet() {
+    private Boolean isOnlineNet() {
 
         try {
-            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.com");
 
-            int val           = p.waitFor();
+            int val = p.waitFor();
             boolean reachable = (val == 0);
             return reachable;
 
@@ -63,13 +61,15 @@ public class Tools {
 
     //ver si esta connectado y si hay internet
 
-    public   boolean estadoConneccion(Context context){
+    public boolean estadoConneccion(Context context) {
 
-        if (isOnlineNet()&&compruebaConexion(context)){
+        if (isOnlineNet() && compruebaConexion(context)) {
             return true;
-        }else {
-            return  false;
+        } else {
+            return false;
         }
     }
+
+
 }
 

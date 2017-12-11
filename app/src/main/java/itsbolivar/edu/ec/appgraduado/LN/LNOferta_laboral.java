@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,12 +22,13 @@ import java.util.List;
 
 import itsbolivar.edu.ec.appgraduado.Adapters.AdapterListView;
 import itsbolivar.edu.ec.appgraduado.clases.Empresa;
+import itsbolivar.edu.ec.appgraduado.clases.Graduado;
 import itsbolivar.edu.ec.appgraduado.clases.JSON;
 import itsbolivar.edu.ec.appgraduado.clases.Oferta_laboral;
 import itsbolivar.edu.ec.appgraduado.clases.Tipo_actividad;
 import itsbolivar.edu.ec.appgraduado.clases.Tipo_cargo;
 import itsbolivar.edu.ec.appgraduado.clases.Tipo_sueldo;
-import itsbolivar.edu.ec.appgraduado.clases.Tools;
+import itsbolivar.edu.ec.appgraduado.clases.*;
 
 /**
  * Created by XL on 7/12/2017.
@@ -44,20 +46,15 @@ public class LNOferta_laboral {
         this.activity = activity;
     }
 
-    public void getOferta_laboralListView(List<Oferta_laboral> lstOferta_laboral, ListView listView) {
-        if (Tools.getInstance().estadoConneccion(this.context)) {
-            new getOferta_laboralListViewAsyncTask(lstOferta_laboral, listView).execute();
-        } else {
-            new getOferta_laboralListViewAsyncTaskLocal(lstOferta_laboral, listView).execute();
-            Toast.makeText(context, "Error Coneccion", Toast.LENGTH_LONG).show();
-        }
+    public void getOferta_laboralListView(ArrayList<Oferta_laboral> lstOferta_laboral, ListView listView, Graduado graduado) {
+        new getOferta_laboralListViewAsyncTask(lstOferta_laboral, listView, graduado).execute();
     }
 
-    public void getOferta_laboralVer(Oferta_laboral oferta_laboralRes, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia) {
+    public void getOferta_laboralVer(Oferta_laboral oferta_laboralRes, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia,TextView txtTelefono,TextView  txtDireccion) {
         if (Tools.getInstance().estadoConneccion(this.context)) {
-            new getOferta_laboralVerAsyncTask(oferta_laboralRes, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia).execute();
+            new getOferta_laboralVerAsyncTask(oferta_laboralRes, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia,txtDireccion,txtTelefono).execute();
         } else {
-            new getOferta_laboralVerAsyncTaskLocal(oferta_laboralRes, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia).execute();
+            new getOferta_laboralVerAsyncTaskLocal(oferta_laboralRes, txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia,txtDireccion,txtTelefono).execute();
             Toast.makeText(context, "Error Coneccion", Toast.LENGTH_LONG).show();
         }
 
@@ -201,14 +198,17 @@ public class LNOferta_laboral {
     //asysntak remoto
     private class getOferta_laboralListViewAsyncTask extends AsyncTask<String, String, Boolean> {
         JSON json = new JSON();
-        private List<Oferta_laboral> lstOferta_laboral = new ArrayList<>();
+        private ArrayList<Oferta_laboral> lstOferta_laboral = new ArrayList<>();
         private ListView listView;
         private AdapterListView adapterListViewOferta_laboral;
         private ProgressDialog pDialog;
+        Graduado graduadoLog = new Graduado();
+        boolean errorInternet = false;
 
-        public getOferta_laboralListViewAsyncTask(List<Oferta_laboral> lstOferta_laboral, ListView listView) {
+        public getOferta_laboralListViewAsyncTask(ArrayList<Oferta_laboral> lstOferta_laboral, ListView listView, Graduado graduado) {
             this.lstOferta_laboral = lstOferta_laboral;
             this.listView = listView;
+            this.graduadoLog = graduado;
         }
 
         @Override
@@ -226,65 +226,35 @@ public class LNOferta_laboral {
             // TODO Auto-generated method stub
             // Check for success tag
             try {
-                // Building Parameters
-                List params = new ArrayList();
-                //params.add(new BasicNameValuePair("cedula", userNow));
-                String REGISTER_URL = url;//servio web
-                //Posting user data to script
-                JSONArray json = this.json.makeHttpRequestReturnArray(REGISTER_URL, "GET", params);
-                // full json response
+                if (Tools.getInstance().estadoConneccion(context)) {
+                    // si hay internet
+                    errorInternet = false;
+                    List params = new ArrayList();
+                    params.add(new BasicNameValuePair("codigo", Integer.toString(graduadoLog.getCodigo())));
+                    String REGISTER_URL = url;//servio web
+                    //Posting user data to script
+                    JSONArray json = this.json.makeHttpRequestReturnArray(REGISTER_URL, "GET", params);
+                    // full json response
+                    Log.d("cargando datos ", json.toString());
+                    eliminarDatosDataBase();
+                    insertarBaseDatos(json.toString());
+                    mostrarDataBase();
+                  MaperarDatos(json,lstOferta_laboral);
+                    return true;
+                } else {
+                    String data = mostrarDataBase();
+                    if (data != "") {
 
-                Log.d("cargando datos ", json.toString());
-
-                eliminarDatosDataBase();
-                insertarBaseDatos(json.toString());
-                mostrarDataBase();
-
-                for (int i = 0; i < json.length(); i++) {
-                    JSONObject item = json.getJSONObject(i);
-                    //datos sin rreferencia
-                    Oferta_laboral oferta_laboral = new Oferta_laboral();
-                    oferta_laboral.setCodigo(item.getInt("codigo"));
-                    oferta_laboral.setCaract_cargo(item.getString("caract_cargo"));
-                    oferta_laboral.setExperiencia(item.getString("experiencia"));
-                    //datos con referencia
-                    Empresa empresa = new Empresa();
-                    JSONObject objEmpresa = item.getJSONObject("empresa");
-
-                    empresa.setCodigo(objEmpresa.getInt("codigo"));
-                    empresa.setNombre(objEmpresa.getString("nombre"));
-                    empresa.setDireccion(objEmpresa.getString("direccion"));
-                    empresa.setTelefono(objEmpresa.getString("telefono"));
-                    empresa.setUsuario(objEmpresa.getString("usuario"));
-                    empresa.setPertenece(objEmpresa.getString("pertenece"));
-                    empresa.setClave(objEmpresa.getString("clave"));
-
-                    Tipo_actividad tipo_actividad = new Tipo_actividad();
-                    JSONObject objtipo_actividad = objEmpresa.getJSONObject("tipo_actividad");
-
-                    tipo_actividad.setCodigo(objtipo_actividad.getInt("codigo"));
-                    tipo_actividad.setNombre(objtipo_actividad.getString("nombre"));
-
-                    empresa.setTipo_actividad(tipo_actividad);
-                    oferta_laboral.setEmpresa(empresa);
-
-                    JSONObject objtipo_cargo = item.getJSONObject("tipo_cargo");
-                    Tipo_cargo tipo_cargo = new Tipo_cargo();
-                    tipo_cargo.setCodigo(objtipo_cargo.getInt("codigo"));
-                    tipo_cargo.setNombre(objtipo_cargo.getString("nombre"))
-                    ;
-                    JSONObject objtipo_sueldo = item.getJSONObject("tipo_sueldo");
-                    Tipo_sueldo tipo_sueldo = new Tipo_sueldo();
-                    tipo_sueldo.setCodigo(objtipo_sueldo.getInt("codigo"));
-                    tipo_sueldo.setRango(objtipo_sueldo.getString("rango"));
-
-                    oferta_laboral.setTipo_cargo(tipo_cargo);
-                    oferta_laboral.setTipo_sueldo(tipo_sueldo);
-                    lstOferta_laboral.add(oferta_laboral);
-                    Log.d("codigo", item.getString("codigo"));
+                        JSONArray json = new JSONArray(data);
+                      MaperarDatos(json,lstOferta_laboral);
+                        errorInternet = true;
+                    }else {
+                        return false;
+                    }
+                    return true;//no hay internet
                 }
 
-                return true;
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -297,7 +267,10 @@ public class LNOferta_laboral {
                 //si optuvo datos crea el adapter y pone en listview
                 adapterListViewOferta_laboral = new AdapterListView(context, lstOferta_laboral);
                 listView.setAdapter(adapterListViewOferta_laboral);
+                if (errorInternet) {
+                    Toast.makeText(context, "Error de Conección ", Toast.LENGTH_LONG).show();
 
+                }
             }
         }
     }
@@ -306,17 +279,19 @@ public class LNOferta_laboral {
     private class getOferta_laboralVerAsyncTask extends AsyncTask<String, String, Boolean> {
         JSON json = new JSON();
         private List<Oferta_laboral> lstOferta_laboral = new ArrayList<>();
-        TextView txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia;
+        TextView txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia, txtTelefono,  txtDireccion;
         private ProgressDialog pDialog;
         private Oferta_laboral oferta_laboralSetect = new Oferta_laboral();
 
-        public getOferta_laboralVerAsyncTask(Oferta_laboral oferta_laboral, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia) {
+        public getOferta_laboralVerAsyncTask(Oferta_laboral oferta_laboral, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia,TextView txtTelefono,TextView  txtDireccion) {
             oferta_laboralSetect = oferta_laboral;
             this.txtdetalleNombre = txtdetalleNombre;
             this.txtDetalleCarac_cargo = txtDetalleCarac_cargo;
             this.txtDetalleCargo = txtDetalleCargo;
             this.txtDetalleSueldo = txtDetalleSueldo;
             this.txtDetalleExperiencia = txtDetalleExperiencia;
+            this.txtTelefono=txtTelefono;
+            this.txtDireccion=txtDireccion;
 
         }
 
@@ -405,6 +380,8 @@ public class LNOferta_laboral {
                         this.txtDetalleCargo.setText(i.getTipo_cargo().getNombre().toString());
                         this.txtDetalleSueldo.setText(i.getTipo_sueldo().getRango().toString());
                         this.txtDetalleExperiencia.setText(i.getExperiencia().toString());
+                        this.txtDireccion.setText(i.getEmpresa().getDireccion().toString());
+                        this.txtTelefono.setText(i.getEmpresa().getTelefono().toString());
                         Log.d("ver:", "" + i.getCodigo());
                     }
                 }
@@ -418,17 +395,19 @@ public class LNOferta_laboral {
     private class getOferta_laboralVerAsyncTaskLocal extends AsyncTask<String, String, Boolean> {
         JSON json = new JSON();
         private List<Oferta_laboral> lstOferta_laboral = new ArrayList<>();
-        TextView txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo, txtDetalleExperiencia;
+        TextView txtdetalleNombre, txtDetalleCarac_cargo, txtDetalleCargo, txtDetalleSueldo,txtTelefono, txtDireccion,txtDetalleExperiencia;
         private ProgressDialog pDialog;
         private Oferta_laboral oferta_laboralSetect = new Oferta_laboral();
 
-        public getOferta_laboralVerAsyncTaskLocal(Oferta_laboral oferta_laboral, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia) {
+        public getOferta_laboralVerAsyncTaskLocal(Oferta_laboral oferta_laboral, TextView txtdetalleNombre, TextView txtDetalleCarac_cargo, TextView txtDetalleCargo, TextView txtDetalleSueldo, TextView txtDetalleExperiencia,TextView txtTelefono,TextView  txtDireccion) {
             oferta_laboralSetect = oferta_laboral;
             this.txtdetalleNombre = txtdetalleNombre;
             this.txtDetalleCarac_cargo = txtDetalleCarac_cargo;
             this.txtDetalleCargo = txtDetalleCargo;
             this.txtDetalleSueldo = txtDetalleSueldo;
             this.txtDetalleExperiencia = txtDetalleExperiencia;
+            this.txtTelefono=txtTelefono;
+            this.txtDireccion=txtDireccion;
 
         }
 
@@ -516,6 +495,8 @@ public class LNOferta_laboral {
                         this.txtDetalleCargo.setText(i.getTipo_cargo().getNombre().toString());
                         this.txtDetalleSueldo.setText(i.getTipo_sueldo().getRango().toString());
                         this.txtDetalleExperiencia.setText(i.getExperiencia().toString());
+                        this.txtDireccion.setText(i.getEmpresa().getDireccion().toString());
+                        this.txtTelefono.setText(i.getEmpresa().getTelefono().toString());
                         Log.d("ver:", "" + i.getCodigo());
                     }
                 }
@@ -523,6 +504,57 @@ public class LNOferta_laboral {
 
             }
         }
+    }
+
+    public void MaperarDatos(JSONArray json,ArrayList<Oferta_laboral> lstOferta_laboral) {
+
+        try {
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject item = json.getJSONObject(i);
+                //datos sin rreferencia
+                Oferta_laboral oferta_laboral = new Oferta_laboral();
+                oferta_laboral.setCodigo(item.getInt("codigo"));
+                oferta_laboral.setCaract_cargo(item.getString("caract_cargo"));
+                oferta_laboral.setExperiencia(item.getString("experiencia"));
+                //datos con referencia
+                Empresa empresa = new Empresa();
+                JSONObject objEmpresa = item.getJSONObject("empresa");
+
+                empresa.setCodigo(objEmpresa.getInt("codigo"));
+                empresa.setNombre(objEmpresa.getString("nombre"));
+                empresa.setDireccion(objEmpresa.getString("direccion"));
+                empresa.setTelefono(objEmpresa.getString("telefono"));
+                empresa.setUsuario(objEmpresa.getString("usuario"));
+                empresa.setPertenece(objEmpresa.getString("pertenece"));
+                empresa.setClave(objEmpresa.getString("clave"));
+
+                Tipo_actividad tipo_actividad = new Tipo_actividad();
+                JSONObject objtipo_actividad = objEmpresa.getJSONObject("tipo_actividad");
+
+                tipo_actividad.setCodigo(objtipo_actividad.getInt("codigo"));
+                tipo_actividad.setNombre(objtipo_actividad.getString("nombre"));
+
+                empresa.setTipo_actividad(tipo_actividad);
+                oferta_laboral.setEmpresa(empresa);
+
+                JSONObject objtipo_cargo = item.getJSONObject("tipo_cargo");
+                Tipo_cargo tipo_cargo = new Tipo_cargo();
+                tipo_cargo.setCodigo(objtipo_cargo.getInt("codigo"));
+                tipo_cargo.setNombre(objtipo_cargo.getString("nombre"));
+                JSONObject objtipo_sueldo = item.getJSONObject("tipo_sueldo");
+                Tipo_sueldo tipo_sueldo = new Tipo_sueldo();
+                tipo_sueldo.setCodigo(objtipo_sueldo.getInt("codigo"));
+                tipo_sueldo.setRango(objtipo_sueldo.getString("rango"));
+
+                oferta_laboral.setTipo_cargo(tipo_cargo);
+                oferta_laboral.setTipo_sueldo(tipo_sueldo);
+                lstOferta_laboral.add(oferta_laboral);
+                Log.d("codigo", item.getString("codigo"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

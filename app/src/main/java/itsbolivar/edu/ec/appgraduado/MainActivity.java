@@ -7,7 +7,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         listViewDatos = (ListView) findViewById(R.id.listViewDatos);
         LNOferta_laboral lnOferta_laboral = new LNOferta_laboral(MainActivity.this, getBaseContext(), getString(R.string.URL_Service_oferta_laboral));
-        lnOferta_laboral.getOferta_laboralListView(list, listViewDatos);
+        //lnOferta_laboral.getOferta_laboralListView(list, listViewDatos);
 
         listViewDatos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

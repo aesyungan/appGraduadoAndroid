@@ -50,10 +50,12 @@
                     android:text="Intel"
                     android:textColor="@color/titulo"
                     android:textSize="20dp" />
+
                 <LinearLayout
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp">
+                    android:layout_height="20dp"
+                    android:gravity="center">
+
                     <TextView
                         android:id="@+id/txtcaract_cargo"
                         style="@style/autoscroll"
@@ -68,7 +70,6 @@
                         android:textColor="@color/respuesta"
                         android:textSize="17dp" />
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -93,13 +94,13 @@
 
                             <TextView
                                 android:id="@+id/txt_tipo_cargo_nombre"
+                                style="@style/autoscroll"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:ellipsize="end"
                                 android:gravity="center"
                                 android:maxLength="13"
-                                style="@style/autoscroll"
                                 android:text="Administrador"
                                 android:textColor="@color/respuesta"
                                 android:textSize="17dp" />
@@ -111,8 +112,8 @@
                             android:gravity="bottom|right">
 
                             <TextView
-                                style="@style/autoscroll"
                                 android:id="@+id/txtexperiencia"
+                                style="@style/autoscroll"
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
