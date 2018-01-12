@@ -3,7 +3,8 @@
     <string name="title_activity_ver_detalles">Detalles</string>
     <!--<string name="URL_Service_oferta_laboral">http://186.46.236.4:9090/graduado/ws/oferta/listar2</string>-->
     <string name="URL_Service_oferta_laboral">http://138.197.105.31:8080/graduado/ws/oferta/listar2</string>
-    <string name="IP_SERVIDOR">http://138.197.105.31:8080/graduado/</string>
+    <!---<string name="IP_SERVIDOR">http://138.197.105.31:8080/graduado/</string>-->
+    <string name="IP_SERVIDOR">http://fichaestudiantil.unach.edu.ec/graduado/</string>
 
 
     <string name="action_sign_in">Sign in </string>

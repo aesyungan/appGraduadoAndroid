@@ -57,7 +57,7 @@ public  class EstadoTelefono {
     private static Boolean isOnlineNet() {
 
         try {
-            Process p = Runtime.getRuntime().exec("ping -c 1 www.google.es");
+            Process p = Runtime.getRuntime().exec("ping -c 1 www.google.com");
 
             int val           = p.waitFor();
             boolean reachable = (val == 0);
